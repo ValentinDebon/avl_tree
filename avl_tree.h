@@ -20,14 +20,7 @@
 /** Alias to what it holds, just to avoid void * for code clarity */
 typedef void avl_tree_element_t;
 typedef uint64_t avl_tree_hash_t;
-
-/** Node in the avl_tree */
-struct avl_tree_node {
-	avl_tree_element_t *element;
-
-	struct avl_tree_node *left, *right;
-	int height;
-};
+typedef long avl_tree_height_t;
 
 /** The avl_tree, with hash field accessor */
 struct avl_tree {
@@ -49,6 +42,38 @@ avl_tree_node_create(avl_tree_element_t *element);
  */
 void
 avl_tree_node_destroy(struct avl_tree_node *node);
+
+/**
+ * Fetch element of node
+ * @param node A valid node
+ * @return Node's element
+ */
+avl_tree_element_t *
+avl_tree_node_element(struct avl_tree_node *node);
+
+/**
+ * Access left child of node
+ * @param node A valid node
+ * @return Node's left child or NULL
+ */
+struct avl_tree_node *
+avl_tree_node_left(struct avl_tree_node *node);
+
+/**
+ * Access right child of node
+ * @param node A valid node
+ * @return Node's right child or NULL
+ */
+struct avl_tree_node *
+avl_tree_node_right(struct avl_tree_node *node);
+
+/**
+ * Access height of tree at node
+ * @param node A valid node, or NULL
+ * @return Height's of tree at node, or 0 if NULL
+ */
+avl_tree_height_t
+avl_tree_node_height(struct avl_tree_node *node);
 
 /**
  * Initialize avl_tree structure
@@ -89,9 +114,9 @@ avl_tree_remove(struct avl_tree *tree,
  * Find a node by its hash
  * @param avl_tree Tree to find in
  * @param hash Hash of the (maybe) designated node
- * @return NULL if not found, or the element else
+ * @return NULL if not found, or the node else
  */
-avl_tree_element_t *
+struct avl_tree_node *
 avl_tree_find(struct avl_tree *tree,
 	avl_tree_hash_t hash);
 

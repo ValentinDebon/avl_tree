@@ -9,10 +9,17 @@
 
 #include <stdlib.h>
 
-#define avl_tree_node_height(node)  ((node) == NULL ? 0 : (node)->height)
 #define avl_tree_node_balance(node) ((node) == NULL ? 0 : \
 	(avl_tree_node_height((node)->right) - avl_tree_node_height((node)->left)))
 #define max(a, b) ((a) > (b) ? (a) : (b))
+
+/** Node in the avl_tree */
+struct avl_tree_node {
+	avl_tree_element_t *element;
+
+	struct avl_tree_node *left, *right;
+	avl_tree_height_t height;
+};
 
 static struct avl_tree_node *
 avl_tree_node_rotate_right(struct avl_tree_node *node) {
@@ -196,6 +203,30 @@ avl_tree_node_destroy(struct avl_tree_node *node) {
 	}
 }
 
+avl_tree_element_t *
+avl_tree_node_element(struct avl_tree_node *node) {
+
+	return node->element;
+}
+
+struct avl_tree_node *
+avl_tree_node_left(struct avl_tree_node *node) {
+
+	return node->left;
+}
+
+struct avl_tree_node *
+avl_tree_node_right(struct avl_tree_node *node) {
+
+	return node->right;
+}
+
+avl_tree_height_t
+avl_tree_node_height(struct avl_tree_node *node) {
+
+	return node == NULL ? 0 : node->height;
+}
+
 void
 avl_tree_init(struct avl_tree *tree,
 	avl_tree_hash_t (*hash_field)(const avl_tree_element_t *)) {
@@ -229,7 +260,7 @@ avl_tree_remove(struct avl_tree *tree,
 	return removed;
 }
 
-avl_tree_element_t *
+struct avl_tree_node *
 avl_tree_find(struct avl_tree *tree,
 	avl_tree_hash_t hash) {
 	struct avl_tree_node *current = tree->root;
@@ -244,6 +275,6 @@ avl_tree_find(struct avl_tree *tree,
 		}
 	}
 
-	return current == NULL ? NULL : current->element;
+	return current;
 }
 
